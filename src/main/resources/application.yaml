@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: jdbc:sqlite::resource:database/FileSync.db
+    username:
+    password:
+    driver-class-name: org.sqlite.JDBC
+    type: com.alibaba.druid.pool.DruidDataSource
+
+server:
+  port: 7000
+
+logging:
+  file:
+    path: log
+
+mybatis:
+  mapper-locations: classpath:mybatis/*.xml
+  type-aliases-package: com/example/filesync/entity
+  configuration:
+    map-underscore-to-camel-case: true

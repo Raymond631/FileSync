@@ -9,11 +9,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class ServerThread implements Runnable {
+public class FileThread implements Runnable {
     private final Socket client;
-    private final String basePath = "D:/Download/ShareFolder/";
+    private final String basePath = "D:/Download/ShareFolder";
 
-    public ServerThread(Socket client) {
+    public FileThread(Socket client) {
         this.client = client;
     }
 

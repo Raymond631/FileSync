@@ -1,0 +1,18 @@
+2023-05-26T11:26:17.563+08:00  INFO 13508 --- [main] c.example.filesync.FileSyncApplication   : Starting FileSyncApplication using Java 17.0.6 with PID 13508 (D:\Project\Course\ComputerNetwork\FileSync\target\classes started by Raymond Li in D:\Project\Course\ComputerNetwork\FileSync)
+2023-05-26T11:26:17.568+08:00  INFO 13508 --- [main] c.example.filesync.FileSyncApplication   : No active profile set, falling back to 1 default profile: "default"
+2023-05-26T11:26:18.382+08:00  WARN 13508 --- [main] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.example.filesync]' package. Please check your configuration.
+2023-05-26T11:26:18.899+08:00  INFO 13508 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 7000 (http)
+2023-05-26T11:26:18.954+08:00  INFO 13508 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-05-26T11:26:18.955+08:00  INFO 13508 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.8]
+2023-05-26T11:26:19.093+08:00  INFO 13508 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-05-26T11:26:19.094+08:00  INFO 13508 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1469 ms
+2023-05-26T11:26:19.638+08:00  INFO 13508 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 7000 (http) with context path ''
+2023-05-26T11:26:19.646+08:00  INFO 13508 --- [main] c.example.filesync.FileSyncApplication   : Started FileSyncApplication in 2.746 seconds (process running for 3.513)
+2023-05-26T11:26:49.316+08:00  INFO 13508 --- [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-0} closing ...
+2023-05-26T11:37:22.801+08:00  INFO 5176 --- [main] c.e.filesync.mapper.FileMapperTest       : Starting FileMapperTest using Java 17.0.6 with PID 5176 (started by Raymond Li in D:\Project\Course\ComputerNetwork\FileSync)
+2023-05-26T11:37:22.805+08:00  INFO 5176 --- [main] c.e.filesync.mapper.FileMapperTest       : No active profile set, falling back to 1 default profile: "default"
+2023-05-26T11:37:26.239+08:00  INFO 5176 --- [main] c.e.filesync.mapper.FileMapperTest       : Started FileMapperTest in 4.001 seconds (process running for 5.717)
+2023-05-26T11:37:28.333+08:00 ERROR 5176 --- [main] com.alibaba.druid.pool.DruidDataSource   : testWhileIdle is true, validationQuery not set
+2023-05-26T11:37:28.353+08:00  INFO 5176 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2023-05-26T11:37:28.647+08:00  INFO 5176 --- [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closing ...
+2023-05-26T11:37:28.653+08:00  INFO 5176 --- [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed

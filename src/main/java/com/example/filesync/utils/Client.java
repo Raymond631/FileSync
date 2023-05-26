@@ -2,31 +2,41 @@ package com.example.filesync.utils;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
+import com.example.filesync.entity.Host;
 
 import java.io.*;
 import java.net.Socket;
+import java.time.LocalDateTime;
+import java.util.Map;
 
+/**
+ * 发送端
+ */
 public class Client {
-    private String ip;
-    private int port;
+    // private static String ip = "localhost";
+    // private static int port = 6699;
 
-    public Client(String ip, int port) {
-        this.ip = ip;
-        this.port = port;
+    public static void sendFileInfo(Map<String, LocalDateTime> fileInfo, Host host){
+        try (Socket socket = new Socket(host.getIp(), host.getPort()); DataOutputStream dos = new DataOutputStream(socket.getOutputStream())) {
+            dos.writeUTF(JSON.toJSONString(fileInfo));
+            dos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void start() {
-        try (Socket socket = new Socket(ip, port); OutputStream outputStream = socket.getOutputStream(); DataOutputStream dos = new DataOutputStream(outputStream)) {
-            String[] fileNames = {"D:/Document/文件分布式同步服务.docx", "D:/Document/《软件开发架构平台》实验指导书2021级_实验二.doc"};
-            dos.writeInt(fileNames.length);
+
+    public static void sendFile(Map<String, LocalDateTime> fileInfo, Host host) {
+        try (Socket socket = new Socket(host.getIp(), host.getPort()); OutputStream outputStream = socket.getOutputStream(); DataOutputStream dos = new DataOutputStream(outputStream)) {
+            dos.writeInt(fileInfo.size());
             dos.flush();
 
-            for (int i = 0; i < fileNames.length; i++) {
-                File file = new File(fileNames[i]);
+            for (Map.Entry<String, LocalDateTime> entry : fileInfo.entrySet()) {
+                File file = new File(entry.getKey());
 
                 //写入文件信息
                 JSONObject info = new JSONObject();
-                info.put("name", file.getName());
+                info.put("name", entry.getValue());
                 info.put("length", file.length());
                 dos.writeUTF(JSON.toJSONString(info));
                 dos.flush();
