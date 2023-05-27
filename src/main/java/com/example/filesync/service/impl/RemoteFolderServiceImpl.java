@@ -22,7 +22,7 @@ public class RemoteFolderServiceImpl implements RemoteFolderService {
     public void addFolder(RemoteFolder folder) throws IOException {
         try (DatagramSocket ds = new DatagramSocket()) {
             ds.connect(InetAddress.getByName("255.255.255.255"), 9999); // 连接指定服务器和端口
-            Message<RemoteFolder> msg = new Message<>(Message.findRemoteFolder, folder, InetAddress.getLocalHost().toString());
+            Message<RemoteFolder> msg = new Message<>(Message.findRemoteFolder, folder, InetAddress.getLocalHost().getHostAddress());
             byte[] data = JSON.toJSONString(msg).getBytes();
             DatagramPacket packet = new DatagramPacket(data, data.length);
             ds.send(packet);

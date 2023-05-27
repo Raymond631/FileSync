@@ -28,7 +28,7 @@ public class UdpHandle {
         if (message.getData().getDeviceId().equals(CommonUtils.getMac())) {
             try (DatagramSocket ds = new DatagramSocket()) {
                 ds.connect(InetAddress.getByName(message.getSrcIp()), 9999); // 回应
-                Message<String> resp = new Message<>(Message.findRemoteFolderResponse, InetAddress.getLocalHost().toString(), InetAddress.getLocalHost().toString());
+                Message<String> resp = new Message<>(Message.findRemoteFolderResponse, InetAddress.getLocalHost().getHostAddress(), InetAddress.getLocalHost().toString());
                 byte[] data = JSON.toJSONString(resp).getBytes();
                 DatagramPacket packet = new DatagramPacket(data, data.length);
                 ds.send(packet);
