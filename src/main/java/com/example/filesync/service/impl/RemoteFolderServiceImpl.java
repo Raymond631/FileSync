@@ -23,7 +23,7 @@ import java.util.Map;
  */
 @Service
 public class RemoteFolderServiceImpl implements RemoteFolderService {
-    public Message<Boolean> resp = null;  //回调“信箱”
+    public Message<String> resp = null;  //回调“信箱”
     @Autowired
     private RemoteFolderMapper remoteFolderMapper;
 
@@ -31,7 +31,7 @@ public class RemoteFolderServiceImpl implements RemoteFolderService {
      * 钩子，用于回调
      */
     @Override
-    public void setResp(Message<Boolean> resp) {
+    public void setResp(Message<String> resp) {
         this.resp = resp;
     }
 
@@ -39,7 +39,9 @@ public class RemoteFolderServiceImpl implements RemoteFolderService {
     public Boolean addFolder(RemoteFolder folder) throws InterruptedException, IOException {
         Message<RemoteFolder> msg = new Message<>(Message.findRemoteFolder, folder, CommonUtils.getLocalHostExactAddress());
         Client.broadcast(msg);
-        if (waitForResponse() && resp.getData()) {  // 有回复且对方有这个文件夹
+        if (waitForResponse() && !resp.getData().equals("")) {  // 有回复且对方有这个文件夹
+            String basePath = folder.getLocalPath();
+            folder.setLocalPath(basePath + resp.getData());
             remoteFolderMapper.insertFolder(folder);
             resp = null;  // 重置“信箱”
             return true;
@@ -60,9 +62,8 @@ public class RemoteFolderServiceImpl implements RemoteFolderService {
     }
 
     @Override
-    public boolean searchLocalFolder(String folderId) {
-        LocalFolder folder = remoteFolderMapper.selectLocalFolderById(folderId);
-        return folder != null;
+    public LocalFolder searchLocalFolder(String folderId) {
+        return remoteFolderMapper.selectLocalFolderById(folderId);
     }
 
     @Override
@@ -70,7 +71,7 @@ public class RemoteFolderServiceImpl implements RemoteFolderService {
         RemoteFolder folder = remoteFolderMapper.selectRemoteFolderById(folderId);
         Message<RemoteFolder> msg = new Message<>(Message.findRemoteFolder, folder, CommonUtils.getLocalHostExactAddress());
         Client.broadcast(msg);  // 广播寻址
-        if (waitForResponse() && resp.getData()) {  // 有回复且对方有这个文件夹
+        if (waitForResponse() && !resp.getData().equals("")) {  // 有回复且对方有这个文件夹
             String destIp = resp.getSrcIp();  // 获取对方ip
             resp = null;  // 重置“信箱”
 

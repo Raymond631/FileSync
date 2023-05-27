@@ -1,5 +1,6 @@
 package com.example.filesync.service;
 
+import com.example.filesync.entity.LocalFolder;
 import com.example.filesync.entity.Message;
 import com.example.filesync.entity.RemoteFolder;
 
@@ -13,7 +14,7 @@ import java.util.List;
  */
 public interface RemoteFolderService {
 
-    public void setResp(Message<Boolean> resp);
+    public void setResp(Message<String> resp);
 
     Boolean addFolder(RemoteFolder folder) throws IOException, InterruptedException;
 
@@ -21,7 +22,7 @@ public interface RemoteFolderService {
 
     void removeFolder(String folderId);
 
-    boolean searchLocalFolder(String folderId);
+    LocalFolder searchLocalFolder(String folderId);
 
     void sync(String folderId) throws IOException, InterruptedException;
 }

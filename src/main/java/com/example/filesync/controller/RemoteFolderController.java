@@ -51,7 +51,7 @@ public class RemoteFolderController {
     @PutMapping("/remoteFolder")
     public CommonResponse sync(@RequestParam String folderId) throws IOException, InterruptedException {
         log.info("同步文件夹  |  param: " + folderId);
-//        remoteFolderService.sync(folderId);
-        return null;
+        remoteFolderService.sync(folderId);
+        return CommonResponse.success("同步请求发送成功");
     }
 }

@@ -2,17 +2,25 @@ package com.example.filesync.socket;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
+import com.example.filesync.common.CommonUtils;
+import com.example.filesync.entity.FolderInfo;
+import com.example.filesync.entity.RemoteFolder;
+import com.example.filesync.service.RemoteFolderService;
+import com.example.filesync.service.impl.RemoteFolderServiceImpl;
 
 import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class TcpThread implements Runnable {
     private final Socket client;
-    private String basePath = "D:/Download";
+    private String basePath = "D:/FileSync";
 
     public TcpThread(Socket client) {
         this.client = client;
@@ -39,40 +47,53 @@ public class TcpThread implements Runnable {
      * 给别人发文件
      */
     public void responseSync(DataInputStream dis) throws IOException {
-//        FolderInfo folderInfo = JSON.parseObject(dis.readUTF(), FolderInfo.class);
-//        RemoteFolder folder = folderInfo.getFolder();
-//        Map<String, LocalDateTime> remoteInfo = folderInfo.getInfo();
-//
-//        try (OutputStream outputStream = client.getOutputStream(); DataOutputStream dos = new DataOutputStream(outputStream)) {
-//            dos.writeInt(Client.fileTcp);
-//            dos.flush();
-//
-//            dos.writeInt(fileInfo.size());
-//            dos.flush();
-//
-//            for (Map.Entry<String, LocalDateTime> entry : fileInfo.entrySet()) {
-//                File file = new File(entry.getKey());
-//
-//                //写入文件信息
-//                JSONObject info = new JSONObject();
-//                info.put("name", entry.getValue());
-//                info.put("length", file.length());
-//                dos.writeUTF(JSON.toJSONString(info));
-//                dos.flush();
-//
-//                //写入文件内容
-//                byte[] bytes = new byte[1024];
-//                int length;
-//                try (FileInputStream fis = new FileInputStream(file);) {
-//                    while ((length = fis.read(bytes, 0, bytes.length)) != -1) {
-//                        outputStream.write(bytes, 0, length);
-//                        outputStream.flush();
-//                    }
-//                }
-//            }
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
+        FolderInfo folderInfo = JSON.parseObject(dis.readUTF(), FolderInfo.class);
+        RemoteFolder folder = folderInfo.getFolder();
+        Map<String, LocalDateTime> remoteInfo = folderInfo.getInfo();
+
+        RemoteFolderService service = new RemoteFolderServiceImpl();
+        String localPath = service.searchLocalFolder(folder.getFolderId()).getFolderPath();
+        Map<String, LocalDateTime> localInfo = CommonUtils.scanDirectory(localPath);
+
+        Map<String, LocalDateTime> fileInfo = new HashMap<>();
+        for (Map.Entry<String, LocalDateTime> entry : localInfo.entrySet()) {
+            if (remoteInfo.get(entry.getKey()) == null) {  // 新文件
+                fileInfo.put(entry.getKey(), entry.getValue());
+            } else if (remoteInfo.get(entry.getKey()).isBefore(entry.getValue())) {  // 修改过的文件
+                fileInfo.put(entry.getKey(), entry.getValue());
+            }
+        }
+
+        try (OutputStream outputStream = client.getOutputStream(); DataOutputStream dos = new DataOutputStream(outputStream)) {
+            dos.writeInt(Client.fileTcp);
+            dos.flush();
+
+            dos.writeInt(fileInfo.size());
+            dos.flush();
+
+            for (Map.Entry<String, LocalDateTime> entry : fileInfo.entrySet()) {
+                File file = new File(entry.getKey());
+
+                //写入文件信息
+                JSONObject info = new JSONObject();
+                info.put("name", entry.getValue());
+                info.put("length", file.length());
+                dos.writeUTF(JSON.toJSONString(info));
+                dos.flush();
+
+                //写入文件内容
+                byte[] bytes = new byte[1024];
+                int length;
+                try (FileInputStream fis = new FileInputStream(file);) {
+                    while ((length = fis.read(bytes, 0, bytes.length)) != -1) {
+                        outputStream.write(bytes, 0, length);
+                        outputStream.flush();
+                    }
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

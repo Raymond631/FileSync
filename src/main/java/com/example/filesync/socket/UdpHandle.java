@@ -3,6 +3,7 @@ package com.example.filesync.socket;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.TypeReference;
 import com.example.filesync.common.CommonUtils;
+import com.example.filesync.entity.LocalFolder;
 import com.example.filesync.entity.Message;
 import com.example.filesync.entity.RemoteFolder;
 import com.example.filesync.service.RemoteFolderService;
@@ -10,6 +11,7 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -40,12 +42,13 @@ public class UdpHandle {
                 ds.connect(InetAddress.getByName(message.getSrcIp()), 9999); // 回应
                 String myIp = CommonUtils.getLocalHostExactAddress();
 
-                Message<Boolean> resp;
+                Message<String> resp;
                 // 本地是否有这个文件夹
-                if (udpHandle.remoteFolderService.searchLocalFolder(folder.getFolderId())) {
-                    resp = new Message<>(Message.findRemoteFolderResponse, true, myIp);
+                LocalFolder localFolder = udpHandle.remoteFolderService.searchLocalFolder(folder.getFolderId());
+                if (localFolder != null) {
+                    resp = new Message<>(Message.findRemoteFolderResponse, new File(localFolder.getFolderPath()).getName(), myIp);
                 } else {
-                    resp = new Message<>(Message.findRemoteFolderResponse, false, myIp);
+                    resp = new Message<>(Message.findRemoteFolderResponse, "", myIp);
                 }
 
                 byte[] data = JSON.toJSONString(resp).getBytes();
@@ -56,7 +59,7 @@ public class UdpHandle {
         }
     }
 
-    public static void findRemoteFolderCallBack(Message<Boolean> message) {
+    public static void findRemoteFolderCallBack(Message<String> message) {
         udpHandle.remoteFolderService.setResp(message);
     }
 
