@@ -1,13 +1,10 @@
 package com.example.filesync.mapper;
 
 import com.example.filesync.entity.LocalFolder;
-import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Raymond Li
@@ -16,9 +13,6 @@ import java.util.Map;
  */
 @Mapper
 public interface LocalFolderMapper {
-
-    @MapKey(value = "relative_path")
-    Map<String, LocalDateTime> getFileList(@Param("folder_path") String folderPath);
 
     void insertFolder(LocalFolder localFolder);
 

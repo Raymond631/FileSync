@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -37,7 +36,7 @@ public class LocalFolderController {
      * 移除本地共享文件夹
      */
     @DeleteMapping("/localFolder")
-    public CommonResponse removeFolder(String folderId) {
+    public CommonResponse removeFolder(@RequestBody String folderId) {
         log.info("移除本地共享文件夹  |  param: " + folderId);
         localFolderService.removeFolder(folderId);
         return CommonResponse.success("移除成功");
@@ -47,8 +46,8 @@ public class LocalFolderController {
      * 前端获取数据
      */
     @GetMapping("/localFolder")
-    public List<LocalFolder> getFolders() {
-        log.info("获取本地共享文件夹数据  |  param: 无参数");
-        return localFolderService.getFolders();
+    public CommonResponse getFolders() {
+        log.info("获取本地共享文件夹列表   |  param: 无参数");
+        return CommonResponse.success(localFolderService.getFolders());
     }
 }

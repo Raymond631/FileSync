@@ -6,10 +6,7 @@ import com.example.filesync.entity.RemoteFolder;
 import com.example.filesync.service.RemoteFolderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -24,13 +21,38 @@ public class RemoteFolderController {
         return CommonResponse.success(CommonUtils.getMac());
     }
 
+    @GetMapping("/remoteFolder")
+    public CommonResponse getFolder() {
+        log.info("获取远程同步文件夹列表  |  param: 无参数");
+        return CommonResponse.success(remoteFolderService.getFolders());
+    }
+
+    @DeleteMapping("/remoteFolder")
+    public CommonResponse removeFolder(@RequestBody String folderId) {
+        log.info("移除远程同步文件夹  |  param: " + folderId);
+        remoteFolderService.removeFolder(folderId);
+        return CommonResponse.success("移除成功");
+    }
+
     /**
      * remoteFolder中封装的是远程设备的id（非本机）
+     * TODO 回调
      */
     @PostMapping("/remoteFolder")
     public CommonResponse addFolder(@RequestBody RemoteFolder RemoteFolder) throws IOException {
         log.info("添加远程同步文件夹  |  param: " + RemoteFolder.toString());
         remoteFolderService.addFolder(RemoteFolder);
         return CommonResponse.success("异步调用");
+    }
+
+    /**
+     * 同步
+     * TODO 扫描本地文件夹，将信息传给远程设备
+     * 远程设备和自己的最后修改时间对比，将修改时间更晚的文件传回来
+     */
+    @PutMapping("/remoteFolder")
+    public CommonResponse sync(@RequestBody String folderId) {
+        log.info("同步文件夹  |  param: " + folderId);
+        return null;
     }
 }

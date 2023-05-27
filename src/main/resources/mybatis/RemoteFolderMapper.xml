@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.filesync.mapper.RemoteFolderMapper">
+    <select id="selectFolders" resultType="com.example.filesync.entity.RemoteFolder">
+        select *
+        from remote_folder;
+    </select>
+
+    <delete id="deleteFolder">
+        delete
+        from remote_folder
+        where folder_id = #{folderId};
+    </delete>
+</mapper>

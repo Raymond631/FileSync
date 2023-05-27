@@ -1,20 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.filesync.mapper.LocalFolderMapper">
-
-    <select id="getFileList" resultType="java.time.LocalDateTime">
-        select file.last_modified
-        from localFolder
-                 inner join file on localFolder.folder_id = file.folder_id
-        where localFolder.folder_path = #{folder_path};
-    </select>
-
-    <insert id="insertFile">
-        insert into file
-        values (#{folderId}, #{relativePath}, #{lastModified});
-    </insert>
-
-
     <insert id="insertFolder">
         insert into local_folder
         values (#{folderId}, #{folderPath});
