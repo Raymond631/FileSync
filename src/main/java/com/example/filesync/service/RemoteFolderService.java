@@ -14,7 +14,7 @@ import java.util.List;
 public interface RemoteFolderService {
     public void setResp(Message<Boolean> resp);
 
-    void addFolder(RemoteFolder folder) throws IOException;
+    Boolean addFolder(RemoteFolder folder) throws IOException;
 
     List<RemoteFolder> getFolders();
 

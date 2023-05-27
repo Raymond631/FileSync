@@ -23,7 +23,7 @@ import java.util.List;
  */
 @Service
 public class RemoteFolderServiceImpl implements RemoteFolderService {
-    public Message<Boolean> resp = null;
+    public Message<Boolean> resp = null;  //回调“信箱”
     @Autowired
     private RemoteFolderMapper remoteFolderMapper;
 
@@ -36,7 +36,7 @@ public class RemoteFolderServiceImpl implements RemoteFolderService {
     }
 
     @Override
-    public void addFolder(RemoteFolder folder) throws IOException {
+    public Boolean addFolder(RemoteFolder folder) throws IOException {
         try (DatagramSocket ds = new DatagramSocket()) {
             ds.connect(InetAddress.getByName("255.255.255.255"), 9999); // 连接指定服务器和端口
             Message<RemoteFolder> msg = new Message<>(Message.findRemoteFolder, folder, CommonUtils.getLocalHostExactAddress());
@@ -45,14 +45,24 @@ public class RemoteFolderServiceImpl implements RemoteFolderService {
             ds.send(packet);
             ds.disconnect();
 
+            // 检查“信箱”是否有回复
+            long t1 = System.currentTimeMillis();
             while (resp == null) {
-                Thread.sleep(1000);
+                long t2 = System.currentTimeMillis();
+                if (t2 - t1 > 10000) {
+                    return false;  // 超时
+                }
+                Thread.sleep(1000);  // 1秒检查一次”信箱“
             }
+            Boolean hasFolder = resp.getData();
+            resp = null;  // 重置“信箱”
 
-            if (resp.getData()) {
-                System.out.println("有这个文件夹");
-            } else {
-                System.out.println("没有这个文件夹");
+            if (hasFolder) { // 有这个文件夹
+                int i = remoteFolderMapper.insertFolder(folder);
+                System.out.println("影响行数：" + i);
+                return true;
+            } else { // 没有这个文件夹
+                return false;
             }
         } catch (InterruptedException e) {
             throw new RuntimeException(e);

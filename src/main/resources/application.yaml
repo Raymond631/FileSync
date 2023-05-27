@@ -1,6 +1,9 @@
 spring:
   datasource:
-    url: jdbc:sqlite::resource:database/FileSync.db
+    # TODO 部署使用相对路径
+    # url: jdbc:sqlite::resource:database/FileSync.db
+    # TODO 开发使用绝对路径
+    url: jdbc:sqlite:src/main/resources/database/FileSync.db
     username:
     password:
     driver-class-name: org.sqlite.JDBC
@@ -18,3 +21,4 @@ mybatis:
   type-aliases-package: com/example/filesync/entity
   configuration:
     map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

@@ -39,10 +39,14 @@ public class RemoteFolderController {
      * TODO 回调
      */
     @PostMapping("/remoteFolder")
-    public CommonResponse addFolder(@RequestBody RemoteFolder RemoteFolder) throws IOException {
-        log.info("添加远程同步文件夹  |  param: " + RemoteFolder.toString());
-        remoteFolderService.addFolder(RemoteFolder);
-        return CommonResponse.success("异步调用");
+    public CommonResponse addFolder(@RequestBody RemoteFolder remoteFolder) throws IOException {
+        remoteFolder.setLastSync("未同步");
+        log.info("添加远程同步文件夹  |  param: " + remoteFolder);
+        if (remoteFolderService.addFolder(remoteFolder)) {
+            return CommonResponse.success("添加成功,请刷新页面");
+        } else {
+            return CommonResponse.success("未找到设备或文件夹，请检查输入是否有误");
+        }
     }
 
     /**
