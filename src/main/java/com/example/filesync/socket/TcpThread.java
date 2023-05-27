@@ -2,52 +2,93 @@ package com.example.filesync.socket;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
+import com.example.filesync.entity.FolderInfo;
+import com.example.filesync.entity.RemoteFolder;
+import com.example.filesync.service.RemoteFolderService;
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.util.Map;
 
+@Component
 public class TcpThread implements Runnable {
+
+    private static TcpThread tcpThread;
     private final Socket client;
-    private final String basePath = "D:/Download/ShareFolder";
+
+    @Autowired
+    private RemoteFolderService remoteFolderService;
 
     public TcpThread(Socket client) {
         this.client = client;
     }
 
+    /**
+     * 使静态类支持IoC
+     */
+    @PostConstruct
+    public void init() {
+        tcpThread = this;
+        tcpThread.remoteFolderService = this.remoteFolderService;
+    }
+
     @Override
     public void run() {
         try (InputStream inputStream = client.getInputStream(); DataInputStream dis = new DataInputStream(inputStream)) {
-            //读取文件数
-            int numOfFiles = dis.readInt();
-            for (int i = 0; i < numOfFiles; i++) {
-                //读取文件信息
-                JSONObject info = JSON.parseObject(dis.readUTF());
-                String fileName = info.getString("name");
-                long fileLength = info.getLong("length");
+            int type = dis.readInt();
+            switch (type) {
+                case Client.infoTcp -> {
+                    responseSync(dis);
+                }
+                case Client.fileTcp -> {
+                    receiveFile(dis);
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-                //创建文件实例和文件输出流
-                String path = basePath + fileName;
-                createFileRecursion(path, 0); //递归创建文件
-                File file = new File(path);
+    /**
+     * 给别人发文件
+     */
+    public void responseSync(DataInputStream dis) throws IOException {
+        FolderInfo folderInfo = JSON.parseObject(dis.readUTF(), FolderInfo.class);
+        RemoteFolder folder = folderInfo.getFolder();
+        Map<String, LocalDateTime> remoteInfo = folderInfo.getInfo();
 
-                //开始接受文件主体
+
+        try (OutputStream outputStream = client.getOutputStream(); DataOutputStream dos = new DataOutputStream(outputStream)) {
+            dos.writeInt(Client.fileTcp);
+            dos.flush();
+
+            dos.writeInt(fileInfo.size());
+            dos.flush();
+
+            for (Map.Entry<String, LocalDateTime> entry : fileInfo.entrySet()) {
+                File file = new File(entry.getKey());
+
+                //写入文件信息
+                JSONObject info = new JSONObject();
+                info.put("name", entry.getValue());
+                info.put("length", file.length());
+                dos.writeUTF(JSON.toJSONString(info));
+                dos.flush();
+
+                //写入文件内容
                 byte[] bytes = new byte[1024];
-                int length = 0;
-                try (FileOutputStream fos = new FileOutputStream(file)) {
-                    while (((length = dis.read(bytes, 0, bytes.length)) != -1)) {
-                        fos.write(bytes, 0, length);
-                        fos.flush();
-                        fileLength -= length;
-
-                        if (fileLength == 0) {
-                            break;
-                        }
-                        if (fileLength < bytes.length) {
-                            bytes = new byte[(int) fileLength];
-                        }
+                int length;
+                try (FileInputStream fis = new FileInputStream(file);) {
+                    while ((length = fis.read(bytes, 0, bytes.length)) != -1) {
+                        outputStream.write(bytes, 0, length);
+                        outputStream.flush();
                     }
                 }
             }
@@ -56,6 +97,46 @@ public class TcpThread implements Runnable {
         }
     }
 
+    /**
+     * 接收文件
+     */
+    public void receiveFile(DataInputStream dis) throws IOException {
+        //读取文件数
+        int numOfFiles = dis.readInt();
+        for (int i = 0; i < numOfFiles; i++) {
+            //读取文件信息
+            JSONObject info = JSON.parseObject(dis.readUTF());
+            String fileName = info.getString("name");
+            long fileLength = info.getLong("length");
+
+            //创建文件实例和文件输出流
+            String path = basePath + fileName;
+            createFileRecursion(path, 0); //递归创建文件
+            File file = new File(path);
+
+            //开始接受文件主体
+            byte[] bytes = new byte[1024];
+            int length = 0;
+            try (FileOutputStream fos = new FileOutputStream(file)) {
+                while (((length = dis.read(bytes, 0, bytes.length)) != -1)) {
+                    fos.write(bytes, 0, length);
+                    fos.flush();
+                    fileLength -= length;
+
+                    if (fileLength == 0) {
+                        break;
+                    }
+                    if (fileLength < bytes.length) {
+                        bytes = new byte[(int) fileLength];
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 递归创建文件
+     */
     public void createFileRecursion(String fileName, Integer height) throws IOException {
         Path path = Paths.get(fileName);
         if (Files.exists(path)) {

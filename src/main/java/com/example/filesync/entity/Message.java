@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class Message<T> {
     public static final int findRemoteFolder = 1;
     public static final int findRemoteFolderResponse = 2;
+    public static final int syncRequest = 3;
 
     private int type;
     private T data;

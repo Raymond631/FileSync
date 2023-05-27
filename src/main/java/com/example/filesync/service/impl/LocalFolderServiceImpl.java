@@ -6,13 +6,7 @@ import com.example.filesync.service.LocalFolderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Raymond Li
@@ -23,16 +17,6 @@ import java.util.Map;
 public class LocalFolderServiceImpl implements LocalFolderService {
     @Autowired
     private LocalFolderMapper localFolderMapper;
-
-    @Override
-    public Map<String, LocalDateTime> scanDirectory(String folderPath) {
-        File directory = new File(folderPath);
-        String rootPath = new File(directory.getAbsolutePath()).getParent();
-
-        Map<String, LocalDateTime> fileInfo = new HashMap<>();
-        scanFilesWithRecursion(folderPath, rootPath, fileInfo);
-        return fileInfo;
-    }
 
     @Override
     public void addFolder(LocalFolder localFolder) {
@@ -49,32 +33,6 @@ public class LocalFolderServiceImpl implements LocalFolderService {
         return localFolderMapper.selectFolders();
     }
 
-    public void scanFilesWithRecursion(String folderPath, String rootPath, Map<String, LocalDateTime> fileInfo) {
-        File directory = new File(folderPath);
-        if (directory.isDirectory()) {
-            File[] fileList = directory.listFiles();
-            if (fileList != null) {
-                for (File file : fileList) {
-                    //如果当前是文件夹，进入递归扫描文件夹
-                    if (file.isDirectory()) {
-                        scanFilesWithRecursion(file.getAbsolutePath(), rootPath, fileInfo);
-                    }
-                    //非文件夹，将文件及其修改时间放进map
-                    else {
-                        Instant instant = Instant.ofEpochMilli(file.lastModified());
-                        ZoneId zone = ZoneId.systemDefault();
-                        LocalDateTime lastModified = LocalDateTime.ofInstant(instant, zone);
-
-                        String absolutePath = file.getAbsolutePath();
-                        String relativePath = absolutePath.replace(rootPath, "");
-                        System.out.println("relativePath:" + relativePath);
-
-                        fileInfo.put(relativePath, lastModified);
-                    }
-                }
-            }
-        }
-    }
 
     public void test(String folderPath) {
         // Map<String, LocalDateTime> newFileInfo = scanDirectory(folderPath);

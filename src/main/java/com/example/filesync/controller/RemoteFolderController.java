@@ -18,6 +18,7 @@ public class RemoteFolderController {
 
     @GetMapping("/deviceId")
     public CommonResponse getDeviceId() {
+        log.info("前端获取本机ID  |  param: 无参数");
         return CommonResponse.success(CommonUtils.getMac());
     }
 
@@ -27,8 +28,8 @@ public class RemoteFolderController {
         return CommonResponse.success(remoteFolderService.getFolders());
     }
 
-    @DeleteMapping("/remoteFolder")
-    public CommonResponse removeFolder(@RequestBody String folderId) {
+    @DeleteMapping("/remoteFolder/{folderId}")
+    public CommonResponse removeFolder(@PathVariable String folderId) {
         log.info("移除远程同步文件夹  |  param: " + folderId);
         remoteFolderService.removeFolder(folderId);
         return CommonResponse.success("移除成功");
@@ -39,7 +40,7 @@ public class RemoteFolderController {
      * TODO 回调
      */
     @PostMapping("/remoteFolder")
-    public CommonResponse addFolder(@RequestBody RemoteFolder remoteFolder) throws IOException {
+    public CommonResponse addFolder(@RequestBody RemoteFolder remoteFolder) throws IOException, InterruptedException {
         remoteFolder.setLastSync("未同步");
         log.info("添加远程同步文件夹  |  param: " + remoteFolder);
         if (remoteFolderService.addFolder(remoteFolder)) {
@@ -54,9 +55,10 @@ public class RemoteFolderController {
      * TODO 扫描本地文件夹，将信息传给远程设备
      * 远程设备和自己的最后修改时间对比，将修改时间更晚的文件传回来
      */
-    @PutMapping("/remoteFolder")
-    public CommonResponse sync(@RequestBody String folderId) {
+    @PutMapping("/remoteFolder/{folderId}")
+    public CommonResponse sync(@PathVariable String folderId) throws IOException, InterruptedException {
         log.info("同步文件夹  |  param: " + folderId);
+//        remoteFolderService.sync(folderId);
         return null;
     }
 }

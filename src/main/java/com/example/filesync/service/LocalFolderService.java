@@ -2,9 +2,7 @@ package com.example.filesync.service;
 
 import com.example.filesync.entity.LocalFolder;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Raymond Li
@@ -12,7 +10,7 @@ import java.util.Map;
  * @description
  */
 public interface LocalFolderService {
-    Map<String, LocalDateTime> scanDirectory(String folderPath);
+
 
     void addFolder(LocalFolder localFolder);
 

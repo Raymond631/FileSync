@@ -12,13 +12,16 @@ import java.util.List;
  * @description
  */
 public interface RemoteFolderService {
+
     public void setResp(Message<Boolean> resp);
 
-    Boolean addFolder(RemoteFolder folder) throws IOException;
+    Boolean addFolder(RemoteFolder folder) throws IOException, InterruptedException;
 
     List<RemoteFolder> getFolders();
 
     void removeFolder(String folderId);
 
     boolean searchLocalFolder(String folderId);
+
+    void sync(String folderId) throws IOException, InterruptedException;
 }

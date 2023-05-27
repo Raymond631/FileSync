@@ -9,7 +9,7 @@ import java.util.concurrent.*;
  * 接收文件
  */
 public class TcpServer {
-    private static int port = 6699;
+    private static int port = 6666;
 
     public static void startFileServer() {
         try {

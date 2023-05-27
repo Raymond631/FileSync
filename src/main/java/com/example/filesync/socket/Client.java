@@ -1,56 +1,46 @@
 package com.example.filesync.socket;
 
 import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONObject;
-import com.example.filesync.entity.Host;
+import com.example.filesync.entity.FolderInfo;
+import com.example.filesync.entity.Message;
 
-import java.io.*;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.Socket;
-import java.time.LocalDateTime;
-import java.util.Map;
 
 /**
  * 发送端
  */
 public class Client {
-    // private static String ip = "localhost";
-    // private static int port = 6699;
+    public static final int infoTcp = 1;
+    public static final int fileTcp = 2;
 
-    public static void sendFileInfo(Map<String, LocalDateTime> fileInfo, Host host) {
-        try (Socket socket = new Socket(host.getIp(), host.getPort()); DataOutputStream dos = new DataOutputStream(socket.getOutputStream())) {
-            dos.writeUTF(JSON.toJSONString(fileInfo));
-            dos.flush();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    /**
+     * UDP广播寻址
+     */
+    public static <T> void broadcast(Message<T> msg) throws IOException {
+        try (DatagramSocket ds = new DatagramSocket()) {
+            ds.connect(InetAddress.getByName("255.255.255.255"), 9999); // 连接指定服务器和端口
+            byte[] data = JSON.toJSONString(msg).getBytes();
+            DatagramPacket packet = new DatagramPacket(data, data.length);
+            ds.send(packet);
+            ds.disconnect();
         }
     }
 
-
-    public static void sendFile(Map<String, LocalDateTime> fileInfo, Host host) {
-        try (Socket socket = new Socket(host.getIp(), host.getPort()); OutputStream outputStream = socket.getOutputStream(); DataOutputStream dos = new DataOutputStream(outputStream)) {
-            dos.writeInt(fileInfo.size());
+    /**
+     * TCP单播同步请求
+     */
+    public static void sendFileInfo(FolderInfo folderInfo, String destIp) {
+        try (Socket socket = new Socket(destIp, 6666); DataOutputStream dos = new DataOutputStream(socket.getOutputStream())) {
+            dos.writeInt(infoTcp);
             dos.flush();
 
-            for (Map.Entry<String, LocalDateTime> entry : fileInfo.entrySet()) {
-                File file = new File(entry.getKey());
-
-                //写入文件信息
-                JSONObject info = new JSONObject();
-                info.put("name", entry.getValue());
-                info.put("length", file.length());
-                dos.writeUTF(JSON.toJSONString(info));
-                dos.flush();
-
-                //写入文件内容
-                byte[] bytes = new byte[1024];
-                int length = 0;
-                try (FileInputStream fis = new FileInputStream(file);) {
-                    while ((length = fis.read(bytes, 0, bytes.length)) != -1) {
-                        outputStream.write(bytes, 0, length);
-                        outputStream.flush();
-                    }
-                }
-            }
+            dos.writeUTF(JSON.toJSONString(folderInfo));
+            dos.flush();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

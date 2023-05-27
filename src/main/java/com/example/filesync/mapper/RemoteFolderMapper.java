@@ -17,4 +17,6 @@ public interface RemoteFolderMapper {
     LocalFolder selectLocalFolderById(@Param("folderId") String folderId);
 
     int insertFolder(RemoteFolder folder);
+
+    RemoteFolder selectRemoteFolderById(@Param("folderId") String folderId);
 }

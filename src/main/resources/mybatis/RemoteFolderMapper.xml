@@ -19,8 +19,15 @@
         where folder_id = #{folderId};
     </select>
 
+
     <insert id="insertFolder">
         insert into remote_folder
         values (#{deviceId}, #{folderId}, #{localPath}, #{lastSync});
     </insert>
+
+    <select id="selectRemoteFolderById" resultType="com.example.filesync.entity.RemoteFolder">
+        select *
+        from remote_folder
+        where folder_id = #{folderId};
+    </select>
 </mapper>
