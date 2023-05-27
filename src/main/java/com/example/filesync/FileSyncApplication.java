@@ -10,7 +10,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 @SpringBootApplication
 public class FileSyncApplication {
     public static void main(String[] args) {
-        SpringApplication.run(FileSyncApplication.class, args);
+        ConfigurableApplicationContext applicationContext = SpringApplication.run(FileSyncApplication.class, args);
+        ApplicationContextUtil.setAc(applicationContext);
 
         new Thread(new UdpServer()).start();
         System.out.println("udp监听启动成功");

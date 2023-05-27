@@ -62,7 +62,6 @@ public class RemoteFolderServiceImpl implements RemoteFolderService {
 
     @Override
     public LocalFolder searchLocalFolder(String folderId) {
-        System.out.println(remoteFolderMapper.selectLocalFolderById(folderId));
         return remoteFolderMapper.selectLocalFolderById(folderId);
     }
 
@@ -77,9 +76,7 @@ public class RemoteFolderServiceImpl implements RemoteFolderService {
 
             Map<String, LocalDateTime> localInfo = CommonUtil.scanDirectory(folder.getLocalPath());
             FolderInfo folderInfo = new FolderInfo(folder, localInfo);
-            System.out.println("开始");
             Client.sendFileInfo(folderInfo, destIp);
-            System.out.println("结束");
         } else {
             resp = null;  // 重置“信箱”
         }

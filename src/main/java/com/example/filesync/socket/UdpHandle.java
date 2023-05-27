@@ -51,6 +51,7 @@ public class UdpHandle {
                     resp = new Message<>(Message.findRemoteFolderResponse, "", myIp);
                 }
 
+                System.out.println(resp);
                 byte[] data = JSON.toJSONString(resp).getBytes();
                 DatagramPacket packet = new DatagramPacket(data, data.length);
                 ds.send(packet);

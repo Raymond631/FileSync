@@ -32,28 +32,4 @@ public class LocalFolderServiceImpl implements LocalFolderService {
     public List<LocalFolder> getFolders() {
         return localFolderMapper.selectFolders();
     }
-
-
-    public void test(String folderPath) {
-        // Map<String, LocalDateTime> newFileInfo = scanDirectory(folderPath);
-        // if(newFileInfo.isEmpty()){
-        //     System.out.println("空文件夹");
-        //     return;
-        // }
-        //
-        // Map<String, LocalDateTime> oldFileInfo = selectFileList(folderPath);
-        // if(oldFileInfo.isEmpty()){
-        //     // 新文件夹
-        //     File directory = new File(folderPath);
-        //     MyFolder folder = new MyFolder(UUID.randomUUID().toString(),directory.getName(),directory.getAbsolutePath());
-        //     fileMapper.insertFolder(folder);
-        //     for (Map.Entry<String, LocalDateTime> entry : newFileInfo.entrySet()) {
-        //         MyFile file = new MyFile(UUID.randomUUID().toString(),entry.getKey(),entry.getValue());
-        //         fileMapper.insertFile(file);
-        //     }
-        //     // Client.sendFile(newFileInfo);
-        // }else{
-        //
-        // }
-    }
 }

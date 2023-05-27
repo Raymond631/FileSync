@@ -9,14 +9,14 @@ import org.springframework.context.ApplicationContextAware;
  * @create 2023-05-28 2:15
  * @description
  */
-public class ApplicationContextUtil implements ApplicationContextAware{
+public class ApplicationContextUtil{
     private static ApplicationContext ac;
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        ac = applicationContext;
-    }
-    public static <T> T getBean(Class<T> clazz) {
+    public static <T>  T getBean(Class<T> clazz) {
         return ac.getBean(clazz);
+    }
+
+    public static void setAc(ApplicationContext applicationContext){
+        ac = applicationContext;
     }
 }

@@ -78,7 +78,6 @@ public class CommonUtil {
 
                         String absolutePath = file.getAbsolutePath();
                         String relativePath = absolutePath.replace(rootPath, "");
-                        System.out.println("relativePath:" + relativePath);
 
                         fileInfo.put(relativePath, lastModified);
                     }

@@ -14,11 +14,5 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 class LocalFolderMapperTest {
-    @Autowired
-    private LocalFolderMapper localFolderMapper;
 
-    @Test
-    void getFileList() {
-        // System.out.println(fileMapper.getFileList());
-    }
 }
