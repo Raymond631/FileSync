@@ -1,7 +1,6 @@
 package com.example.filesync.controller;
 
 import com.example.filesync.common.CommonResponse;
-import com.example.filesync.common.CommonUtils;
 import com.example.filesync.entity.RemoteFolder;
 import com.example.filesync.service.RemoteFolderService;
 import lombok.extern.slf4j.Slf4j;
@@ -16,20 +15,14 @@ public class RemoteFolderController {
     @Autowired
     private RemoteFolderService remoteFolderService;
 
-    @GetMapping("/deviceId")
-    public CommonResponse getDeviceId() {
-        log.info("前端获取本机ID  |  param: 无参数");
-        return CommonResponse.success(CommonUtils.getMac());
-    }
-
     @GetMapping("/remoteFolder")
     public CommonResponse getFolder() {
         log.info("获取远程同步文件夹列表  |  param: 无参数");
         return CommonResponse.success(remoteFolderService.getFolders());
     }
 
-    @DeleteMapping("/remoteFolder/{folderId}")
-    public CommonResponse removeFolder(@PathVariable String folderId) {
+    @DeleteMapping("/remoteFolder")
+    public CommonResponse removeFolder(@RequestParam String folderId) {
         log.info("移除远程同步文件夹  |  param: " + folderId);
         remoteFolderService.removeFolder(folderId);
         return CommonResponse.success("移除成功");
@@ -55,8 +48,8 @@ public class RemoteFolderController {
      * TODO 扫描本地文件夹，将信息传给远程设备
      * 远程设备和自己的最后修改时间对比，将修改时间更晚的文件传回来
      */
-    @PutMapping("/remoteFolder/{folderId}")
-    public CommonResponse sync(@PathVariable String folderId) throws IOException, InterruptedException {
+    @PutMapping("/remoteFolder")
+    public CommonResponse sync(@RequestParam String folderId) throws IOException, InterruptedException {
         log.info("同步文件夹  |  param: " + folderId);
 //        remoteFolderService.sync(folderId);
         return null;

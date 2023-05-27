@@ -43,7 +43,6 @@ public class TcpThread implements Runnable {
 //        RemoteFolder folder = folderInfo.getFolder();
 //        Map<String, LocalDateTime> remoteInfo = folderInfo.getInfo();
 //
-//
 //        try (OutputStream outputStream = client.getOutputStream(); DataOutputStream dos = new DataOutputStream(outputStream)) {
 //            dos.writeInt(Client.fileTcp);
 //            dos.flush();

@@ -1,6 +1,7 @@
 package com.example.filesync.controller;
 
 import com.example.filesync.common.CommonResponse;
+import com.example.filesync.common.CommonUtils;
 import com.example.filesync.entity.LocalFolder;
 import com.example.filesync.service.LocalFolderService;
 import lombok.extern.slf4j.Slf4j;
@@ -21,11 +22,17 @@ public class LocalFolderController {
     @Autowired
     private LocalFolderService localFolderService;
 
+    @GetMapping("/deviceId")
+    public CommonResponse getDeviceId() {
+        log.info("前端获取本机ID  |  param: 无参数");
+        return CommonResponse.success(CommonUtils.getMac());
+    }
+
     /**
      * 添加本地共享文件夹
      */
-    @PostMapping("/localFolder/{folderPath}")
-    public CommonResponse addFolder(@PathVariable String folderPath) {
+    @PostMapping("/localFolder")
+    public CommonResponse addFolder(@RequestParam String folderPath) {
         log.info("添加本地共享文件夹  |  param: " + folderPath);
         LocalFolder localFolder = new LocalFolder(UUID.randomUUID().toString(), folderPath);
         localFolderService.addFolder(localFolder);
@@ -36,7 +43,7 @@ public class LocalFolderController {
      * 移除本地共享文件夹
      */
     @DeleteMapping("/localFolder")
-    public CommonResponse removeFolder(@RequestBody String folderId) {
+    public CommonResponse removeFolder(@RequestParam String folderId) {
         log.info("移除本地共享文件夹  |  param: " + folderId);
         localFolderService.removeFolder(folderId);
         return CommonResponse.success("移除成功");
