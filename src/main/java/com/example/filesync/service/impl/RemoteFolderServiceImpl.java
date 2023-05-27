@@ -11,6 +11,7 @@ import com.example.filesync.socket.Client;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -40,7 +41,7 @@ public class RemoteFolderServiceImpl implements RemoteFolderService {
         if (waitForResponse() && !resp.getData().equals("")) {  // 有回复且对方有这个文件夹
             String basePath = folder.getLocalPath();
             // TODO 前端传来的basePath必须以”/“结尾
-            folder.setLocalPath(basePath + resp.getData());
+            folder.setLocalPath(new File(basePath + resp.getData()).getAbsolutePath());
             remoteFolderMapper.insertFolder(folder);
             resp = null;  // 重置“信箱”
             return true;

@@ -53,7 +53,7 @@ public class CommonUtil {
 
     public static Map<String, LocalDateTime> scanDirectory(String folderPath) {
         File directory = new File(folderPath);
-        String rootPath = new File(directory.getAbsolutePath()).getParent();
+        String rootPath = new File(directory.getAbsolutePath()).getAbsolutePath();
 
         Map<String, LocalDateTime> fileInfo = new HashMap<>();
         scanFilesWithRecursion(folderPath, rootPath, fileInfo);

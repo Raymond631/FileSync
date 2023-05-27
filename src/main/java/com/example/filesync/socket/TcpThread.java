@@ -54,20 +54,19 @@ public class TcpThread implements Runnable {
      */
     public void responseSync(DataInputStream dis) throws IOException {
         FolderInfo folderInfo = JSON.parseObject(dis.readUTF(), FolderInfo.class);
-        RemoteFolder folder = folderInfo.getFolder();
         Map<String, LocalDateTime> remoteInfo = folderInfo.getInfo();
         System.out.println(remoteInfo);
 
-        String localPath = remoteFolderService.searchLocalFolder(folder.getFolderId()).getFolderPath();
+        String localPath = remoteFolderService.searchLocalFolder(folderInfo.getFolder().getFolderId()).getFolderPath();
         Map<String, LocalDateTime> localInfo = CommonUtil.scanDirectory(localPath);
         System.out.println(localInfo);
 
         Map<String, LocalDateTime> fileInfo = new HashMap<>();
         for (Map.Entry<String, LocalDateTime> entry : localInfo.entrySet()) {
             if (remoteInfo.get(entry.getKey()) == null) {  // 新文件
-                fileInfo.put(entry.getKey(), entry.getValue());
+                fileInfo.put(localPath+entry.getKey(), entry.getValue());
             } else if (remoteInfo.get(entry.getKey()).isBefore(entry.getValue())) {  // 修改过的文件
-                fileInfo.put(entry.getKey(), entry.getValue());
+                fileInfo.put(localPath+entry.getKey(), entry.getValue());
             }
         }
         System.out.println(fileInfo);
