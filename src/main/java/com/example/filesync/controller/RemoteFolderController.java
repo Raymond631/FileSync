@@ -30,6 +30,7 @@ public class RemoteFolderController {
     @PostMapping("/remoteFolder")
     public CommonResponse addFolder(@RequestBody RemoteFolder RemoteFolder) throws IOException {
         log.info("添加远程同步文件夹  |  param: " + RemoteFolder.toString());
-        return CommonResponse.success(remoteFolderService.addFolder(RemoteFolder));
+        remoteFolderService.addFolder(RemoteFolder);
+        return CommonResponse.success("异步调用");
     }
 }

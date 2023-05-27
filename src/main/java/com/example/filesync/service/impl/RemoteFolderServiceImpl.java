@@ -19,21 +19,14 @@ import java.net.InetAddress;
 @Service
 public class RemoteFolderServiceImpl implements RemoteFolderService {
     @Override
-    public String addFolder(RemoteFolder folder) throws IOException {
-        DatagramSocket ds = new DatagramSocket();
-        ds.setSoTimeout(1000);
-        ds.connect(InetAddress.getByName("255.255.255.255"), 9999); // 连接指定服务器和端口
-        // 发送:
-        Message<RemoteFolder> msg = new Message<>(Message.findRemoteFolder, folder);
-        byte[] data = JSON.toJSONString(msg).getBytes();
-        DatagramPacket packet = new DatagramPacket(data, data.length);
-        ds.send(packet);
-        // 接收:
-        byte[] buffer = new byte[1024];
-        packet = new DatagramPacket(buffer, buffer.length);
-        ds.receive(packet);
-        String resp = new String(packet.getData(), packet.getOffset(), packet.getLength());
-        ds.disconnect();
-        return resp;
+    public void addFolder(RemoteFolder folder) throws IOException {
+        try (DatagramSocket ds = new DatagramSocket()) {
+            ds.connect(InetAddress.getByName("255.255.255.255"), 9999); // 连接指定服务器和端口
+            Message<RemoteFolder> msg = new Message<>(Message.findRemoteFolder, folder, InetAddress.getLocalHost().toString());
+            byte[] data = JSON.toJSONString(msg).getBytes();
+            DatagramPacket packet = new DatagramPacket(data, data.length);
+            ds.send(packet);
+            ds.disconnect();
+        }
     }
 }

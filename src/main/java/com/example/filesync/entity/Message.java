@@ -12,7 +12,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Message<T> {
     public static final int findRemoteFolder = 1;
+    public static final int findRemoteFolderResponse = 2;
 
     private int type;
     private T data;
+    private String srcIp;
 }
