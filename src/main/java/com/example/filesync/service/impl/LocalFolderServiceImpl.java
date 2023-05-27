@@ -25,11 +25,6 @@ public class LocalFolderServiceImpl implements LocalFolderService {
     private LocalFolderMapper localFolderMapper;
 
     @Override
-    public Map<String, LocalDateTime> selectFileList(String folderPath) {
-        return localFolderMapper.getFileList(folderPath);
-    }
-
-    @Override
     public Map<String, LocalDateTime> scanDirectory(String folderPath) {
         File directory = new File(folderPath);
         String rootPath = new File(directory.getAbsolutePath()).getParent();

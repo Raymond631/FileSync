@@ -12,8 +12,6 @@ import java.util.Map;
  * @description
  */
 public interface LocalFolderService {
-    Map<String, LocalDateTime> selectFileList(String folderPath);
-
     Map<String, LocalDateTime> scanDirectory(String folderPath);
 
     void addFolder(LocalFolder localFolder);

@@ -26,6 +26,7 @@ public class UdpHandle {
     public static void findRemoteFolderResponse(Message<RemoteFolder> message) throws IOException {
         // 如果发送方找的是本机
         if (message.getData().getDeviceId().equals(CommonUtils.getMac())) {
+            System.out.println("有人找我");
             try (DatagramSocket ds = new DatagramSocket()) {
                 ds.connect(InetAddress.getByName(message.getSrcIp()), 9999); // 回应
                 String myIp = CommonUtils.getLocalHostExactAddress();
@@ -35,6 +36,8 @@ public class UdpHandle {
                 ds.send(packet);
                 ds.disconnect();
             }
+        } else {
+            System.out.println("找的不是我");
         }
     }
 

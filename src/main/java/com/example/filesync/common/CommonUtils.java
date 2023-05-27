@@ -42,6 +42,6 @@ public class CommonUtils {
         } catch (SocketException e) {
             throw new RuntimeException(e);
         }
-
+        throw new RuntimeException("无法解析本机ip");
     }
 }

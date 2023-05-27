@@ -18,6 +18,7 @@ public class UdpServer {
                 // 收取到的数据存储在buffer中，由packet.getOffset(), packet.getLength()指定起始位置和长度
                 // 将其按UTF-8编码转换为String:
                 String msg = new String(packet.getData(), packet.getOffset(), packet.getLength(), StandardCharsets.UTF_8);
+                System.out.println(msg);
                 int type = JSONObject.parseObject(msg).getIntValue("type");
                 // 消息处理和回复
                 UdpHandle.process(msg, type);
