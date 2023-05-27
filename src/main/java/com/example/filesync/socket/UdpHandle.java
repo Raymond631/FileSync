@@ -7,6 +7,7 @@ import com.example.filesync.entity.LocalFolder;
 import com.example.filesync.entity.Message;
 import com.example.filesync.entity.RemoteFolder;
 import com.example.filesync.service.RemoteFolderService;
+import com.example.filesync.service.impl.RemoteFolderServiceImpl;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,12 +18,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
-@Component
 public class UdpHandle {
-    private static UdpHandle udpHandle;
-    @Autowired
-    private RemoteFolderService remoteFolderService;
-
     public static void process(String msg, int type) throws IOException {
         switch (type) {
             // 寻址回复
@@ -44,7 +40,8 @@ public class UdpHandle {
 
                 Message<String> resp;
                 // 本地是否有这个文件夹
-                LocalFolder localFolder = udpHandle.remoteFolderService.searchLocalFolder(folder.getFolderId());
+                RemoteFolderService service = new RemoteFolderServiceImpl();
+                LocalFolder localFolder = service.searchLocalFolder(folder.getFolderId());
                 if (localFolder != null) {
                     resp = new Message<>(Message.findRemoteFolderResponse, new File(localFolder.getFolderPath()).getName(), myIp);
                 } else {
@@ -60,15 +57,6 @@ public class UdpHandle {
     }
 
     public static void findRemoteFolderCallBack(Message<String> message) {
-        udpHandle.remoteFolderService.setResp(message);
-    }
-
-    /**
-     * 使静态类支持IoC
-     */
-    @PostConstruct
-    public void init() {
-        udpHandle = this;
-        udpHandle.remoteFolderService = this.remoteFolderService;
+        RemoteFolderServiceImpl.resp=message;
     }
 }

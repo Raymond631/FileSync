@@ -50,10 +50,12 @@ public class TcpThread implements Runnable {
         FolderInfo folderInfo = JSON.parseObject(dis.readUTF(), FolderInfo.class);
         RemoteFolder folder = folderInfo.getFolder();
         Map<String, LocalDateTime> remoteInfo = folderInfo.getInfo();
+        System.out.println(remoteInfo);
 
         RemoteFolderService service = new RemoteFolderServiceImpl();
         String localPath = service.searchLocalFolder(folder.getFolderId()).getFolderPath();
         Map<String, LocalDateTime> localInfo = CommonUtils.scanDirectory(localPath);
+        System.out.println(localInfo);
 
         Map<String, LocalDateTime> fileInfo = new HashMap<>();
         for (Map.Entry<String, LocalDateTime> entry : localInfo.entrySet()) {
@@ -63,6 +65,7 @@ public class TcpThread implements Runnable {
                 fileInfo.put(entry.getKey(), entry.getValue());
             }
         }
+        System.out.println(fileInfo);
 
         try (OutputStream outputStream = client.getOutputStream(); DataOutputStream dos = new DataOutputStream(outputStream)) {
             dos.writeInt(Client.fileTcp);

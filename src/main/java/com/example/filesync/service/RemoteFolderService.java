@@ -13,9 +13,6 @@ import java.util.List;
  * @description
  */
 public interface RemoteFolderService {
-
-    public void setResp(Message<String> resp);
-
     Boolean addFolder(RemoteFolder folder) throws IOException, InterruptedException;
 
     List<RemoteFolder> getFolders();

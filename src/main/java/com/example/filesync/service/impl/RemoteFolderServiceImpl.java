@@ -23,17 +23,10 @@ import java.util.Map;
  */
 @Service
 public class RemoteFolderServiceImpl implements RemoteFolderService {
-    public Message<String> resp = null;  //回调“信箱”
+    public static Message<String> resp = null;  //回调“信箱”
+
     @Autowired
     private RemoteFolderMapper remoteFolderMapper;
-
-    /**
-     * 钩子，用于回调
-     */
-    @Override
-    public void setResp(Message<String> resp) {
-        this.resp = resp;
-    }
 
     @Override
     public Boolean addFolder(RemoteFolder folder) throws InterruptedException, IOException {
@@ -64,6 +57,7 @@ public class RemoteFolderServiceImpl implements RemoteFolderService {
 
     @Override
     public LocalFolder searchLocalFolder(String folderId) {
+        System.out.println(remoteFolderMapper.selectLocalFolderById(folderId));
         return remoteFolderMapper.selectLocalFolderById(folderId);
     }
 
