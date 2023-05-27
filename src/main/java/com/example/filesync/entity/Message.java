@@ -5,14 +5,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * @author Raymond Li
- * @create 2023-05-26 20:12
- * @description
+ * 用于UDP-socket通信
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Folder {
-    private String folderPath;
-    private String deviceId;
+public class Message {
+    public static final int findRemoteFolder = 1;
+
+    private int type;
+    private Object data;
 }

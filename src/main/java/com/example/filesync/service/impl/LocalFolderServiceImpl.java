@@ -1,7 +1,8 @@
 package com.example.filesync.service.impl;
 
-import com.example.filesync.mapper.FileMapper;
-import com.example.filesync.service.FileService;
+import com.example.filesync.entity.LocalFolder;
+import com.example.filesync.mapper.LocalFolderMapper;
+import com.example.filesync.service.LocalFolderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +10,9 @@ import java.io.File;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Raymond Li
@@ -17,13 +20,13 @@ import java.util.*;
  * @description
  */
 @Service
-public class FileServiceImpl implements FileService {
+public class LocalFolderServiceImpl implements LocalFolderService {
     @Autowired
-    private FileMapper fileMapper;
+    private LocalFolderMapper localFolderMapper;
 
     @Override
     public Map<String, LocalDateTime> selectFileList(String folderPath) {
-        return fileMapper.getFileList(folderPath);
+        return localFolderMapper.getFileList(folderPath);
     }
 
     @Override
@@ -32,18 +35,34 @@ public class FileServiceImpl implements FileService {
         String rootPath = new File(directory.getAbsolutePath()).getParent();
 
         Map<String, LocalDateTime> fileInfo = new HashMap<>();
-        scanFilesWithRecursion(folderPath,rootPath,fileInfo);
+        scanFilesWithRecursion(folderPath, rootPath, fileInfo);
         return fileInfo;
     }
+
+    @Override
+    public void addFolder(LocalFolder localFolder) {
+        localFolderMapper.insertFolder(localFolder);
+    }
+
+    @Override
+    public void removeFolder(String folderId) {
+        localFolderMapper.deleteFolder(folderId);
+    }
+
+    @Override
+    public List<LocalFolder> getFolders() {
+        return localFolderMapper.selectFolders();
+    }
+
     public void scanFilesWithRecursion(String folderPath, String rootPath, Map<String, LocalDateTime> fileInfo) {
         File directory = new File(folderPath);
-        if(directory.isDirectory()){
+        if (directory.isDirectory()) {
             File[] fileList = directory.listFiles();
-            if(fileList != null){
+            if (fileList != null) {
                 for (File file : fileList) {
                     //如果当前是文件夹，进入递归扫描文件夹
                     if (file.isDirectory()) {
-                        scanFilesWithRecursion(file.getAbsolutePath(), rootPath,fileInfo);
+                        scanFilesWithRecursion(file.getAbsolutePath(), rootPath, fileInfo);
                     }
                     //非文件夹，将文件及其修改时间放进map
                     else {
@@ -62,7 +81,7 @@ public class FileServiceImpl implements FileService {
         }
     }
 
-    public void test(String folderPath){
+    public void test(String folderPath) {
         // Map<String, LocalDateTime> newFileInfo = scanDirectory(folderPath);
         // if(newFileInfo.isEmpty()){
         //     System.out.println("空文件夹");

@@ -1,4 +1,4 @@
-package com.example.filesync.utils;
+package com.example.filesync.socket;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
@@ -16,12 +16,12 @@ public class Client {
     // private static String ip = "localhost";
     // private static int port = 6699;
 
-    public static void sendFileInfo(Map<String, LocalDateTime> fileInfo, Host host){
+    public static void sendFileInfo(Map<String, LocalDateTime> fileInfo, Host host) {
         try (Socket socket = new Socket(host.getIp(), host.getPort()); DataOutputStream dos = new DataOutputStream(socket.getOutputStream())) {
             dos.writeUTF(JSON.toJSONString(fileInfo));
             dos.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -52,7 +52,7 @@ public class Client {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 }
