@@ -1,5 +1,6 @@
 package com.example.filesync.service;
 
+import com.example.filesync.entity.Message;
 import com.example.filesync.entity.RemoteFolder;
 
 import java.io.IOException;
@@ -11,6 +12,8 @@ import java.util.List;
  * @description
  */
 public interface RemoteFolderService {
+    public void setResp(Message<Boolean> resp);
+
     void addFolder(RemoteFolder folder) throws IOException;
 
     List<RemoteFolder> getFolders();

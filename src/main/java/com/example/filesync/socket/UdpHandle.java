@@ -57,7 +57,7 @@ public class UdpHandle {
     }
 
     public static void findRemoteFolderCallBack(Message<Boolean> message) {
-        System.out.println(message.getData());
+        udpHandle.remoteFolderService.setResp(message);
     }
 
     /**

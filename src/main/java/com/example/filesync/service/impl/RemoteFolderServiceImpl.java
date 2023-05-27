@@ -23,8 +23,17 @@ import java.util.List;
  */
 @Service
 public class RemoteFolderServiceImpl implements RemoteFolderService {
+    public Message<Boolean> resp = null;
     @Autowired
     private RemoteFolderMapper remoteFolderMapper;
+
+    /**
+     * 钩子，用于回调
+     */
+    @Override
+    public void setResp(Message<Boolean> resp) {
+        this.resp = resp;
+    }
 
     @Override
     public void addFolder(RemoteFolder folder) throws IOException {
@@ -35,6 +44,18 @@ public class RemoteFolderServiceImpl implements RemoteFolderService {
             DatagramPacket packet = new DatagramPacket(data, data.length);
             ds.send(packet);
             ds.disconnect();
+
+            while (resp == null) {
+                Thread.sleep(1000);
+            }
+
+            if (resp.getData()) {
+                System.out.println("有这个文件夹");
+            } else {
+                System.out.println("没有这个文件夹");
+            }
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 
