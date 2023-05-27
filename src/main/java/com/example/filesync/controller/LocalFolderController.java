@@ -34,6 +34,7 @@ public class LocalFolderController {
     @PostMapping("/localFolder")
     public CommonResponse addFolder(@RequestParam String folderPath) {
         log.info("添加本地共享文件夹  |  param: " + folderPath);
+        // TODO 前端传来的folderPath必须以”/“结尾
         LocalFolder localFolder = new LocalFolder(UUID.randomUUID().toString(), folderPath);
         localFolderService.addFolder(localFolder);
         return CommonResponse.success("添加成功");

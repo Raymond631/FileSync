@@ -43,7 +43,7 @@ public class Client {
             dos.writeUTF(JSON.toJSONString(folderInfo));
             dos.flush();
 
-            receiveFile(new DataInputStream(socket.getInputStream()));
+            receiveFile(new DataInputStream(socket.getInputStream()));  // 接收文件
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

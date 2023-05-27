@@ -54,9 +54,9 @@ public class TcpThread implements Runnable {
         Map<String, LocalDateTime> fileInfo = new HashMap<>();
         for (Map.Entry<String, LocalDateTime> entry : localInfo.entrySet()) {
             if (remoteInfo.get(entry.getKey()) == null) {  // 新文件
-                fileInfo.put(localPath + entry.getKey(), entry.getValue());
+                fileInfo.put(entry.getKey(), entry.getValue());
             } else if (remoteInfo.get(entry.getKey()).isBefore(entry.getValue())) {  // 修改过的文件
-                fileInfo.put(localPath + entry.getKey(), entry.getValue());
+                fileInfo.put(entry.getKey(), entry.getValue());
             }
         }
         System.out.println(fileInfo);
@@ -69,11 +69,11 @@ public class TcpThread implements Runnable {
             dos.flush();
 
             for (Map.Entry<String, LocalDateTime> entry : fileInfo.entrySet()) {
-                File file = new File(entry.getKey());
+                File file = new File(localPath + entry.getKey());
 
                 //写入文件信息
                 JSONObject info = new JSONObject();
-                info.put("name", entry.getValue());
+                info.put("name", entry.getKey());
                 info.put("length", file.length());
                 dos.writeUTF(JSON.toJSONString(info));
                 dos.flush();

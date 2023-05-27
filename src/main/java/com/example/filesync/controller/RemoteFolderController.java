@@ -30,7 +30,6 @@ public class RemoteFolderController {
 
     /**
      * remoteFolder中封装的是远程设备的id（非本机）
-     * TODO 回调
      */
     @PostMapping("/remoteFolder")
     public CommonResponse addFolder(@RequestBody RemoteFolder remoteFolder) throws IOException, InterruptedException {
