@@ -1,6 +1,7 @@
 package com.example.filesync.service.impl;
 
 import com.alibaba.fastjson2.JSON;
+import com.example.filesync.common.CommonUtils;
 import com.example.filesync.entity.Message;
 import com.example.filesync.entity.RemoteFolder;
 import com.example.filesync.service.RemoteFolderService;
@@ -22,7 +23,7 @@ public class RemoteFolderServiceImpl implements RemoteFolderService {
     public void addFolder(RemoteFolder folder) throws IOException {
         try (DatagramSocket ds = new DatagramSocket()) {
             ds.connect(InetAddress.getByName("255.255.255.255"), 9999); // 连接指定服务器和端口
-            Message<RemoteFolder> msg = new Message<>(Message.findRemoteFolder, folder, InetAddress.getLocalHost().getHostAddress());
+            Message<RemoteFolder> msg = new Message<>(Message.findRemoteFolder, folder, CommonUtils.getLocalHostExactAddress().getHostAddress());
             byte[] data = JSON.toJSONString(msg).getBytes();
             DatagramPacket packet = new DatagramPacket(data, data.length);
             ds.send(packet);
