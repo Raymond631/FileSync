@@ -41,6 +41,7 @@ public class RemoteFolderServiceImpl implements RemoteFolderService {
         Client.broadcast(msg);
         if (waitForResponse() && !resp.getData().equals("")) {  // 有回复且对方有这个文件夹
             String basePath = folder.getLocalPath();
+            // TODO 前端传来的basePath必须以”/“结尾
             folder.setLocalPath(basePath + resp.getData());
             remoteFolderMapper.insertFolder(folder);
             resp = null;  // 重置“信箱”
@@ -77,10 +78,11 @@ public class RemoteFolderServiceImpl implements RemoteFolderService {
 
             Map<String, LocalDateTime> localInfo = CommonUtils.scanDirectory(folder.getLocalPath());
             FolderInfo folderInfo = new FolderInfo(folder, localInfo);
+            System.out.println("开始");
             Client.sendFileInfo(folderInfo, destIp);
+            System.out.println("结束");
         } else {
             resp = null;  // 重置“信箱”
-
         }
     }
 

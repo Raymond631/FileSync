@@ -2,12 +2,14 @@ package com.example.filesync.socket;
 
 import com.alibaba.fastjson2.JSONObject;
 
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.nio.charset.StandardCharsets;
 
-public class UdpServer {
-    public static void startMessageServer() throws Exception {
+public class UdpServer implements Runnable {
+    @Override
+    public void run() {
         // 监听指定端口
         try (DatagramSocket ds = new DatagramSocket(9999)) {
             while (true) { // 无限循环
@@ -21,6 +23,8 @@ public class UdpServer {
                 // 消息处理和回复
                 UdpHandle.process(msg, type);
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
