@@ -1,6 +1,8 @@
 package com.example.filesync.socket;
 
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.TypeReference;
 import com.example.filesync.common.CommonUtils;
 import com.example.filesync.entity.Message;
 import com.example.filesync.entity.RemoteFolder;
@@ -23,19 +25,19 @@ public class UdpServer {
             // 收取到的数据存储在buffer中，由packet.getOffset(), packet.getLength()指定起始位置和长度
             // 将其按UTF-8编码转换为String:
             String s = new String(packet.getData(), packet.getOffset(), packet.getLength(), StandardCharsets.UTF_8);
-            Message msg = JSONObject.parseObject(s, Message.class);
+            int type = JSONObject.parseObject(s).getIntValue("type");
             // 消息处理和回复
-            process(msg, packet, ds);
+            process(type, s, packet, ds);
         }
     }
 
-    public static void process(Message msg, DatagramPacket packet, DatagramSocket ds) throws IOException {
-        int type = msg.getType();
+    public static void process(int type, String msg, DatagramPacket packet, DatagramSocket ds) throws IOException {
         switch (type) {
             // 寻址
             case Message.findRemoteFolder -> {
-                RemoteFolder folder = (RemoteFolder) msg.getData();
-                if (folder.getDeviceId().equals(CommonUtils.getMac())) {
+                Message<RemoteFolder> message = JSON.parseObject(msg, new TypeReference<>() {
+                });
+                if (message.getData().getDeviceId().equals(CommonUtils.getMac())) {
                     // 如果发送方找的是本机
                     byte[] data = InetAddress.getLocalHost().toString().getBytes();
                     packet.setData(data);

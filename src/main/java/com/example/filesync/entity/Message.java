@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Message {
+public class Message<T> {
     public static final int findRemoteFolder = 1;
 
     private int type;
-    private Object data;
+    private T data;
 }

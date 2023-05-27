@@ -24,7 +24,7 @@ public class RemoteFolderServiceImpl implements RemoteFolderService {
         ds.setSoTimeout(1000);
         ds.connect(InetAddress.getByName("255.255.255.255"), 9999); // 连接指定服务器和端口
         // 发送:
-        Message msg = new Message(Message.findRemoteFolder, folder);
+        Message<RemoteFolder> msg = new Message<>(Message.findRemoteFolder, folder);
         byte[] data = JSON.toJSONString(msg).getBytes();
         DatagramPacket packet = new DatagramPacket(data, data.length);
         ds.send(packet);

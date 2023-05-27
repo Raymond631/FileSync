@@ -1,18 +1,37 @@
-2023-05-26T11:26:17.563+08:00  INFO 13508 --- [main] c.example.filesync.FileSyncApplication   : Starting FileSyncApplication using Java 17.0.6 with PID 13508 (D:\Project\Course\ComputerNetwork\FileSync\target\classes started by Raymond Li in D:\Project\Course\ComputerNetwork\FileSync)
-2023-05-26T11:26:17.568+08:00  INFO 13508 --- [main] c.example.filesync.FileSyncApplication   : No active profile set, falling back to 1 default profile: "default"
-2023-05-26T11:26:18.382+08:00  WARN 13508 --- [main] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.example.filesync]' package. Please check your configuration.
-2023-05-26T11:26:18.899+08:00  INFO 13508 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 7000 (http)
-2023-05-26T11:26:18.954+08:00  INFO 13508 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2023-05-26T11:26:18.955+08:00  INFO 13508 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.8]
-2023-05-26T11:26:19.093+08:00  INFO 13508 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2023-05-26T11:26:19.094+08:00  INFO 13508 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1469 ms
-2023-05-26T11:26:19.638+08:00  INFO 13508 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 7000 (http) with context path ''
-2023-05-26T11:26:19.646+08:00  INFO 13508 --- [main] c.example.filesync.FileSyncApplication   : Started FileSyncApplication in 2.746 seconds (process running for 3.513)
-2023-05-26T11:26:49.316+08:00  INFO 13508 --- [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-0} closing ...
-2023-05-26T11:37:22.801+08:00  INFO 5176 --- [main] c.e.filesync.mapper.FileMapperTest       : Starting FileMapperTest using Java 17.0.6 with PID 5176 (started by Raymond Li in D:\Project\Course\ComputerNetwork\FileSync)
-2023-05-26T11:37:22.805+08:00  INFO 5176 --- [main] c.e.filesync.mapper.FileMapperTest       : No active profile set, falling back to 1 default profile: "default"
-2023-05-26T11:37:26.239+08:00  INFO 5176 --- [main] c.e.filesync.mapper.FileMapperTest       : Started FileMapperTest in 4.001 seconds (process running for 5.717)
-2023-05-26T11:37:28.333+08:00 ERROR 5176 --- [main] com.alibaba.druid.pool.DruidDataSource   : testWhileIdle is true, validationQuery not set
-2023-05-26T11:37:28.353+08:00  INFO 5176 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
-2023-05-26T11:37:28.647+08:00  INFO 5176 --- [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closing ...
-2023-05-26T11:37:28.653+08:00  INFO 5176 --- [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2023-05-27T09:46:51.793+08:00  INFO 5212 --- [main] c.example.filesync.FileSyncApplication   : Starting FileSyncApplication using Java 17.0.7 with PID 5212 (D:\Project\Course\ComputerNetwork\FileSync\target\classes started by 21905 in D:\Project\Course\ComputerNetwork\FileSync)
+2023-05-27T09:46:51.803+08:00  INFO 5212 --- [main] c.example.filesync.FileSyncApplication   : No active profile set, falling back to 1 default profile: "default"
+2023-05-27T09:46:52.485+08:00  INFO 5212 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 7000 (http)
+2023-05-27T09:46:52.485+08:00  INFO 5212 --- [main] o.a.catalina.core.AprLifecycleListener   : An older version [1.2.36] of the Apache Tomcat Native library is installed, while Tomcat recommends a minimum version of [2.0.1]
+2023-05-27T09:46:52.485+08:00  INFO 5212 --- [main] o.a.catalina.core.AprLifecycleListener   : Loaded Apache Tomcat Native library [1.2.36] using APR version [1.7.2].
+2023-05-27T09:46:52.485+08:00  INFO 5212 --- [main] o.a.catalina.core.AprLifecycleListener   : OpenSSL successfully initialized [OpenSSL 1.1.1t  7 Feb 2023]
+2023-05-27T09:46:52.495+08:00  INFO 5212 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-05-27T09:46:52.495+08:00  INFO 5212 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.8]
+2023-05-27T09:46:52.565+08:00  INFO 5212 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-05-27T09:46:52.565+08:00  INFO 5212 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 727 ms
+2023-05-27T09:46:53.004+08:00  INFO 5212 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 7000 (http) with context path ''
+2023-05-27T09:46:53.010+08:00  INFO 5212 --- [main] c.example.filesync.FileSyncApplication   : Started FileSyncApplication in 1.519 seconds (process running for 1.962)
+2023-05-27T09:48:03.601+08:00  INFO 5212 --- [http-nio-7000-exec-3] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-05-27T09:48:03.601+08:00  INFO 5212 --- [http-nio-7000-exec-3] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-05-27T09:48:03.602+08:00  INFO 5212 --- [http-nio-7000-exec-3] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2023-05-27T09:51:37.864+08:00 ERROR 5212 --- [http-nio-7000-exec-4] c.e.f.common.GlobalExceptionHandler      : Request method 'GET' is not supported
+2023-05-27T09:51:48.659+08:00  INFO 5212 --- [http-nio-7000-exec-6] c.e.f.controller.RemoteFolderController  : 添加远程同步文件夹  |  param: RemoteFolder(deviceId=e96281f222072f8bf6e730d41b42cb30, folderId=null, localPath=null, lastSync=null)
+2023-05-27T09:51:49.760+08:00 ERROR 5212 --- [http-nio-7000-exec-6] c.e.f.common.GlobalExceptionHandler      : Receive timed out
+2023-05-27T09:52:41.520+08:00  INFO 5212 --- [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-0} closing ...
+2023-05-27T09:53:21.563+08:00  INFO 4856 --- [main] c.example.filesync.FileSyncApplication   : Starting FileSyncApplication using Java 17.0.7 with PID 4856 (D:\Project\Course\ComputerNetwork\FileSync\target\classes started by 21905 in D:\Project\Course\ComputerNetwork\FileSync)
+2023-05-27T09:53:21.563+08:00  INFO 4856 --- [main] c.example.filesync.FileSyncApplication   : No active profile set, falling back to 1 default profile: "default"
+2023-05-27T09:53:22.122+08:00  INFO 4856 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 7000 (http)
+2023-05-27T09:53:22.123+08:00  INFO 4856 --- [main] o.a.catalina.core.AprLifecycleListener   : An older version [1.2.36] of the Apache Tomcat Native library is installed, while Tomcat recommends a minimum version of [2.0.1]
+2023-05-27T09:53:22.123+08:00  INFO 4856 --- [main] o.a.catalina.core.AprLifecycleListener   : Loaded Apache Tomcat Native library [1.2.36] using APR version [1.7.2].
+2023-05-27T09:53:22.125+08:00  INFO 4856 --- [main] o.a.catalina.core.AprLifecycleListener   : OpenSSL successfully initialized [OpenSSL 1.1.1t  7 Feb 2023]
+2023-05-27T09:53:22.131+08:00  INFO 4856 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-05-27T09:53:22.131+08:00  INFO 4856 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.8]
+2023-05-27T09:53:22.208+08:00  INFO 4856 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-05-27T09:53:22.209+08:00  INFO 4856 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 616 ms
+2023-05-27T09:53:22.583+08:00  INFO 4856 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 7000 (http) with context path ''
+2023-05-27T09:53:22.589+08:00  INFO 4856 --- [main] c.example.filesync.FileSyncApplication   : Started FileSyncApplication in 1.292 seconds (process running for 1.67)
+2023-05-27T09:54:05.184+08:00  INFO 4856 --- [http-nio-7000-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-05-27T09:54:05.184+08:00  INFO 4856 --- [http-nio-7000-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-05-27T09:54:05.185+08:00  INFO 4856 --- [http-nio-7000-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2023-05-27T09:54:05.241+08:00  INFO 4856 --- [http-nio-7000-exec-1] c.e.f.controller.RemoteFolderController  : 添加远程同步文件夹  |  param: RemoteFolder(deviceId=e96281f222072f8bf6e730d41b42cb30, folderId=a, localPath=b, lastSync=c)
+2023-05-27T09:54:06.337+08:00 ERROR 4856 --- [http-nio-7000-exec-1] c.e.f.common.GlobalExceptionHandler      : Receive timed out
+2023-05-27T10:24:12.801+08:00  INFO 4856 --- [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-0} closing ...
