@@ -1,7 +1,7 @@
 package com.example.filesync.controller;
 
 import com.example.filesync.common.CommonResponse;
-import com.example.filesync.common.CommonUtils;
+import com.example.filesync.common.CommonUtil;
 import com.example.filesync.entity.LocalFolder;
 import com.example.filesync.service.LocalFolderService;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ public class LocalFolderController {
     @GetMapping("/deviceId")
     public CommonResponse getDeviceId() {
         log.info("前端获取本机ID  |  param: 无参数");
-        return CommonResponse.success(CommonUtils.getMac());
+        return CommonResponse.success(CommonUtil.getMac());
     }
 
     /**

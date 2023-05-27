@@ -1,6 +1,6 @@
 package com.example.filesync.service.impl;
 
-import com.example.filesync.common.CommonUtils;
+import com.example.filesync.common.CommonUtil;
 import com.example.filesync.entity.FolderInfo;
 import com.example.filesync.entity.LocalFolder;
 import com.example.filesync.entity.Message;
@@ -23,14 +23,19 @@ import java.util.Map;
  */
 @Service
 public class RemoteFolderServiceImpl implements RemoteFolderService {
-    public static Message<String> resp = null;  //回调“信箱”
+    private static Message<String> resp = null;  //回调“信箱”
+
+    @Override
+    public void setResp(Message<String> resp) {
+        RemoteFolderServiceImpl.resp = resp;
+    }
 
     @Autowired
     private RemoteFolderMapper remoteFolderMapper;
 
     @Override
     public Boolean addFolder(RemoteFolder folder) throws InterruptedException, IOException {
-        Message<RemoteFolder> msg = new Message<>(Message.findRemoteFolder, folder, CommonUtils.getLocalHostExactAddress());
+        Message<RemoteFolder> msg = new Message<>(Message.findRemoteFolder, folder, CommonUtil.getLocalHostExactAddress());
         Client.broadcast(msg);
         if (waitForResponse() && !resp.getData().equals("")) {  // 有回复且对方有这个文件夹
             String basePath = folder.getLocalPath();
@@ -64,13 +69,13 @@ public class RemoteFolderServiceImpl implements RemoteFolderService {
     @Override
     public void sync(String folderId) throws IOException, InterruptedException {
         RemoteFolder folder = remoteFolderMapper.selectRemoteFolderById(folderId);
-        Message<RemoteFolder> msg = new Message<>(Message.findRemoteFolder, folder, CommonUtils.getLocalHostExactAddress());
+        Message<RemoteFolder> msg = new Message<>(Message.findRemoteFolder, folder, CommonUtil.getLocalHostExactAddress());
         Client.broadcast(msg);  // 广播寻址
         if (waitForResponse() && !resp.getData().equals("")) {  // 有回复且对方有这个文件夹
             String destIp = resp.getSrcIp();  // 获取对方ip
             resp = null;  // 重置“信箱”
 
-            Map<String, LocalDateTime> localInfo = CommonUtils.scanDirectory(folder.getLocalPath());
+            Map<String, LocalDateTime> localInfo = CommonUtil.scanDirectory(folder.getLocalPath());
             FolderInfo folderInfo = new FolderInfo(folder, localInfo);
             System.out.println("开始");
             Client.sendFileInfo(folderInfo, destIp);

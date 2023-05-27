@@ -11,7 +11,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CommonUtils {
+public class CommonUtil {
     public static String getMac() {
         String macString;
         try {

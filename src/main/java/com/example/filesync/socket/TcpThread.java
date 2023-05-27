@@ -2,11 +2,11 @@ package com.example.filesync.socket;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
-import com.example.filesync.common.CommonUtils;
+import com.example.filesync.common.ApplicationContextUtil;
+import com.example.filesync.common.CommonUtil;
 import com.example.filesync.entity.FolderInfo;
 import com.example.filesync.entity.RemoteFolder;
 import com.example.filesync.service.RemoteFolderService;
-import com.example.filesync.service.impl.RemoteFolderServiceImpl;
 
 import java.io.*;
 import java.net.Socket;
@@ -19,6 +19,12 @@ import java.util.Map;
 
 
 public class TcpThread implements Runnable {
+    private static RemoteFolderService remoteFolderService;
+    static {
+        //从 Spring 容器中 获取 startFlowService 对象
+        remoteFolderService = ApplicationContextUtil.getBean(RemoteFolderService.class);
+    }
+
     private final Socket client;
     private String basePath = "D:/FileSync";
 
@@ -52,9 +58,8 @@ public class TcpThread implements Runnable {
         Map<String, LocalDateTime> remoteInfo = folderInfo.getInfo();
         System.out.println(remoteInfo);
 
-        RemoteFolderService service = new RemoteFolderServiceImpl();
-        String localPath = service.searchLocalFolder(folder.getFolderId()).getFolderPath();
-        Map<String, LocalDateTime> localInfo = CommonUtils.scanDirectory(localPath);
+        String localPath = remoteFolderService.searchLocalFolder(folder.getFolderId()).getFolderPath();
+        Map<String, LocalDateTime> localInfo = CommonUtil.scanDirectory(localPath);
         System.out.println(localInfo);
 
         Map<String, LocalDateTime> fileInfo = new HashMap<>();
