@@ -20,13 +20,13 @@ import java.util.Map;
 
 public class TcpThread implements Runnable {
     private static RemoteFolderService remoteFolderService;
+
     static {
         //从 Spring 容器中 获取 startFlowService 对象
         remoteFolderService = ApplicationContextUtil.getBean(RemoteFolderService.class);
     }
 
     private final Socket client;
-    private String basePath = "D:/FileSync";
 
     public TcpThread(Socket client) {
         this.client = client;
@@ -57,21 +57,25 @@ public class TcpThread implements Runnable {
         Map<String, LocalDateTime> remoteInfo = folderInfo.getInfo();
         System.out.println(remoteInfo);
 
-        String localPath = remoteFolderService.searchLocalFolder(folderInfo.getFolder().getFolderId()).getFolderPath();
+        RemoteFolder remoteFolder = folderInfo.getFolder();
+        String localPath = remoteFolderService.searchLocalFolder(remoteFolder.getFolderId()).getFolderPath();
         Map<String, LocalDateTime> localInfo = CommonUtil.scanDirectory(localPath);
         System.out.println(localInfo);
 
         Map<String, LocalDateTime> fileInfo = new HashMap<>();
         for (Map.Entry<String, LocalDateTime> entry : localInfo.entrySet()) {
             if (remoteInfo.get(entry.getKey()) == null) {  // 新文件
-                fileInfo.put(localPath+entry.getKey(), entry.getValue());
+                fileInfo.put(localPath + entry.getKey(), entry.getValue());
             } else if (remoteInfo.get(entry.getKey()).isBefore(entry.getValue())) {  // 修改过的文件
-                fileInfo.put(localPath+entry.getKey(), entry.getValue());
+                fileInfo.put(localPath + entry.getKey(), entry.getValue());
             }
         }
         System.out.println(fileInfo);
 
-        try (OutputStream outputStream = client.getOutputStream(); DataOutputStream dos = new DataOutputStream(outputStream)) {
+        try (Socket socket = new Socket(client.getInetAddress().getHostAddress(), 6666); OutputStream outputStream = socket.getOutputStream(); DataOutputStream dos = new DataOutputStream(outputStream)) {
+            dos.writeUTF(JSON.toJSONString(remoteFolder));  // 传回foldId和localPath，方便接收端保存
+            dos.flush();
+
             dos.writeInt(Client.fileTcp);
             dos.flush();
 
@@ -107,7 +111,9 @@ public class TcpThread implements Runnable {
      * 接收文件
      */
     public void receiveFile(DataInputStream dis) throws IOException {
-        //读取文件数
+        RemoteFolder remoteFolder = JSONObject.parseObject(dis.readUTF(), RemoteFolder.class);
+        String basePath = remoteFolder.getLocalPath(); // 读取本地保存路径
+        // 读取文件数
         int numOfFiles = dis.readInt();
         for (int i = 0; i < numOfFiles; i++) {
             //读取文件信息
@@ -144,6 +150,7 @@ public class TcpThread implements Runnable {
      * 递归创建文件
      */
     public void createFileRecursion(String fileName, Integer height) throws IOException {
+        System.out.println(fileName);
         Path path = Paths.get(fileName);
         if (Files.exists(path)) {
             // 如果文件存在
