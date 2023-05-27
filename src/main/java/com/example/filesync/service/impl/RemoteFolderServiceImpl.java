@@ -19,7 +19,7 @@ import java.net.InetAddress;
 @Service
 public class RemoteFolderServiceImpl implements RemoteFolderService {
     @Override
-    public void addFolder(RemoteFolder folder) throws IOException {
+    public String addFolder(RemoteFolder folder) throws IOException {
         DatagramSocket ds = new DatagramSocket();
         ds.setSoTimeout(1000);
         ds.connect(InetAddress.getByName("255.255.255.255"), 9999); // 连接指定服务器和端口
@@ -33,7 +33,7 @@ public class RemoteFolderServiceImpl implements RemoteFolderService {
         packet = new DatagramPacket(buffer, buffer.length);
         ds.receive(packet);
         String resp = new String(packet.getData(), packet.getOffset(), packet.getLength());
-        System.out.println(resp);
         ds.disconnect();
+        return resp;
     }
 }

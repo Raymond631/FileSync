@@ -10,5 +10,5 @@ import java.io.IOException;
  * @description
  */
 public interface RemoteFolderService {
-    void addFolder(RemoteFolder folder) throws IOException;
+    String addFolder(RemoteFolder folder) throws IOException;
 }
