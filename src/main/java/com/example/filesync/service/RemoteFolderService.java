@@ -16,4 +16,6 @@ public interface RemoteFolderService {
     List<RemoteFolder> getFolders();
 
     void removeFolder(String folderId);
+
+    boolean searchLocalFolder(String folderId);
 }

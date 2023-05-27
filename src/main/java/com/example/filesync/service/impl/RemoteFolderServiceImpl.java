@@ -2,6 +2,7 @@ package com.example.filesync.service.impl;
 
 import com.alibaba.fastjson2.JSON;
 import com.example.filesync.common.CommonUtils;
+import com.example.filesync.entity.LocalFolder;
 import com.example.filesync.entity.Message;
 import com.example.filesync.entity.RemoteFolder;
 import com.example.filesync.mapper.RemoteFolderMapper;
@@ -45,5 +46,11 @@ public class RemoteFolderServiceImpl implements RemoteFolderService {
     @Override
     public void removeFolder(String folderId) {
         remoteFolderMapper.deleteFolder(folderId);
+    }
+
+    @Override
+    public boolean searchLocalFolder(String folderId) {
+        LocalFolder folder = remoteFolderMapper.selectLocalFolderById(folderId);
+        return folder != null;
     }
 }

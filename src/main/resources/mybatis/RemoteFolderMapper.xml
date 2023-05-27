@@ -11,4 +11,10 @@
         from remote_folder
         where folder_id = #{folderId};
     </delete>
+
+    <select id="selectLocalFolderById" resultType="com.example.filesync.entity.LocalFolder">
+        select *
+        from local_folder
+        where folder_id = #{folderId};
+    </select>
 </mapper>
