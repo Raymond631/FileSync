@@ -19,4 +19,6 @@ public interface RemoteFolderMapper {
     int insertFolder(RemoteFolder folder);
 
     RemoteFolder selectRemoteFolderById(@Param("folderId") String folderId);
+
+    void updataSyncTime(@Param("folderId") String folderId, @Param("timeNow") String timeNow);
 }

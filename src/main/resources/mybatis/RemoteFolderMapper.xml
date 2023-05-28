@@ -30,4 +30,10 @@
         from remote_folder
         where folder_id = #{folderId};
     </select>
+
+    <update id="updataSyncTime">
+        update from remote_folder
+        set last_sync = #{timeNow}
+        where folder_id = #{folderId};
+    </update>
 </mapper>

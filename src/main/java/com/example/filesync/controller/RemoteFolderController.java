@@ -36,7 +36,7 @@ public class RemoteFolderController {
         remoteFolder.setLastSync("未同步");
         log.info("添加远程同步文件夹  |  param: " + remoteFolder);
         if (remoteFolderService.addFolder(remoteFolder)) {
-            return CommonResponse.success("添加成功,请刷新页面");
+            return CommonResponse.success("添加成功");
         } else {
             return CommonResponse.success("未找到设备或文件夹，请检查输入是否有误");
         }
@@ -51,6 +51,6 @@ public class RemoteFolderController {
     public CommonResponse sync(@RequestParam String folderId) throws IOException, InterruptedException {
         log.info("同步文件夹  |  param: " + folderId);
         remoteFolderService.sync(folderId);
-        return CommonResponse.success("同步请求发送成功");
+        return CommonResponse.success("同步成功");
     }
 }

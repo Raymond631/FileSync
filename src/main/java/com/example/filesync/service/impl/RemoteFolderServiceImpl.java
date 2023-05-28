@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -25,14 +26,13 @@ import java.util.Map;
 @Service
 public class RemoteFolderServiceImpl implements RemoteFolderService {
     private static Message<String> resp = null;  //回调“信箱”
+    @Autowired
+    private RemoteFolderMapper remoteFolderMapper;
 
     @Override
     public void setResp(Message<String> resp) {
         RemoteFolderServiceImpl.resp = resp;
     }
-
-    @Autowired
-    private RemoteFolderMapper remoteFolderMapper;
 
     @Override
     public Boolean addFolder(RemoteFolder folder) throws InterruptedException, IOException {
@@ -78,6 +78,8 @@ public class RemoteFolderServiceImpl implements RemoteFolderService {
             Map<String, LocalDateTime> localInfo = CommonUtil.scanDirectory(folder.getLocalPath());
             FolderInfo folderInfo = new FolderInfo(folder, localInfo);
             Client.sendFileInfo(folderInfo, destIp);
+
+            remoteFolderMapper.updataSyncTime(folder.getFolderId(), getTimeNow());
         } else {
             resp = null;  // 重置“信箱”
         }
@@ -93,5 +95,10 @@ public class RemoteFolderServiceImpl implements RemoteFolderService {
             Thread.sleep(1000);  // 1秒检查一次”信箱“
         }
         return true;
+    }
+
+    public String getTimeNow() {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        return dtf.format(LocalDateTime.now());
     }
 }
