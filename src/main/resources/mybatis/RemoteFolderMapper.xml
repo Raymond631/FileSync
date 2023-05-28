@@ -32,7 +32,7 @@
     </select>
 
     <update id="updataSyncTime">
-        update from remote_folder
+        update remote_folder
         set last_sync = #{timeNow}
         where folder_id = #{folderId};
     </update>
