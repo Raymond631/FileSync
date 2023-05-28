@@ -1,8 +1,7 @@
 spring:
   datasource:
-    # TODO 部署使用相对路径
+    # TODO 开发使用绝对路径,打包部署使用相对路径
     # url: jdbc:sqlite::resource:database/FileSync.db
-    # TODO 开发使用绝对路径
     url: jdbc:sqlite:src/main/resources/database/FileSync.db
     username:
     password:

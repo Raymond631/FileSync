@@ -44,8 +44,6 @@ public class RemoteFolderController {
 
     /**
      * 同步
-     * TODO 扫描本地文件夹，将信息传给远程设备
-     * 远程设备和自己的最后修改时间对比，将修改时间更晚的文件传回来
      */
     @PutMapping("/remoteFolder")
     public CommonResponse sync(@RequestParam String folderId) throws IOException, InterruptedException {

@@ -19,15 +19,13 @@ import java.nio.file.Paths;
  * 发送端
  */
 public class Client {
-    public static final int infoTcp = 1;
-    public static final int fileTcp = 2;
-
     /**
      * UDP广播寻址
      */
     public static <T> void broadcast(Message<T> msg) throws IOException {
         try (DatagramSocket ds = new DatagramSocket()) {
-            ds.connect(InetAddress.getByName("255.255.255.255"), 9999); // 连接指定服务器和端口
+            // TODO 路由器用255.255.255.255,手机热点用网络段+255，如192.168.23.255
+            ds.connect(InetAddress.getByName("192.168.23.255"), 9999); // 连接指定服务器和端口
             byte[] data = JSON.toJSONString(msg).getBytes();
             DatagramPacket packet = new DatagramPacket(data, data.length);
             ds.send(packet);
